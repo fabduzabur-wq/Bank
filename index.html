@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBank - Online Banking System</title>
+    <style>
+        /* --- CSS DESIGN (Dizaayinii) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #004d99, #0073e6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 { color: #004d99; margin-bottom: 20px; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #005bb5; }
+
+        .btn-secondary {
+            background-color: #28a745; /* Green for deposit */
+        }
+        .btn-secondary:hover { background-color: #218838; }
+
+        .btn-danger {
+            background-color: #dc3545; /* Red for withdraw/logout */
+        }
+        .btn-danger:hover { background-color: #c82333; }
+
+        .hidden { display: none; }
+
+        .balance-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #0073e6;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #004d99;
+        }
+
+        .actions { display: flex; gap: 10px; }
+        .actions button { width: 50%; }
+    </style>
+</body>
+<body>
+
+    <!-- --- FUULA SEENAA (LOGIN PAGE) --- -->
+    <div id="loginPage" class="container">
+        <h2>🏦 MyBank Login</h2>
+        <input type="text" id="username" placeholder="Username (e.g., admin)">
+        <input type="password" id="password" placeholder="Password (e.g., 1234)">
+        <button onclick="login()">Login to Account</button>
+        <p style="font-size: 12px; color: gray; margin-top: 15px;">Demo: Use username 'admin' and password '1234'</p>
+    </div>
+
+    <!-- --- FUULA DASHBOORDII (DASHBOARD PAGE) --- -->
+    <div id="dashboard" class="container hidden">
+        <h2>Welcome, <span id="userDisplay">User</span>!</h2>
+        
+        <div class="balance-card">
+            <p style="margin: 0; color: #666;">Available Balance</p>
+            <p class="balance-amount">$<span id="balanceDisplay">0.00</span></p>
+        </div>
+
+        <div class="actions">
+            <button class="btn-secondary" onclick="deposit()">+ Deposit</button>
+            <button class="btn-danger" onclick="withdraw()">- Withdraw</button>
+        </div>
+
+        <button class="btn-danger" style="margin-top: 20px;" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- --- JAVASCRIPT (LOJIKII SIRNICHA) --- -->
+    <script>
+        // Daataa baankii (Mock Database)
+        let currentBalance = 5000.00;
+        let validUser = "admin";
+        let validPass = "1234";
+
+        // Seena (Login)
+        function login() {
+            let user = document.getElementById('username').value;
+            let pass = document.getElementById('password').value;
+
+            if (user === validUser && pass === validPass) {
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('userDisplay').innerText = user;
+                updateBalance();
+            } else {
+                alert("Invalid Username or Password! \nTry: admin / 1234");
+            }
+        }
+
+        // Baasii (Logout)
+        function logout() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // Herrega haaromsuu (Update Balance UI)
+        function updateBalance() {
+            document.getElementById('balanceDisplay').innerText = currentBalance.toFixed(2);
+        }
+
+        // Maallaqa galchuu (Deposit)
+        function deposit() {
+            let amount = parseFloat(prompt("Enter amount to deposit:"));
+            if (amount > 0) {
+                currentBalance += amount;
+                updateBalance();
+                alert(`$${amount.toFixed(2)} deposited successfully!`);
+            } else {
+                alert("Invalid amount!");
+            }
+        }
+
+        // Maallaqa baasuu (Withdraw)
+        function withdraw() {
+            let amount = parseFloat(prompt("Enter amount to withdraw:"));
+            if (amount > 0 && amount <= currentBalance) {
+                currentBalance -= amount;
+                updateBalance();
+                alert(`$${amount.toFixed(2)} withdrawn successfully!`);
+            } else if (amount > currentBalance) {
+                alert("Insufficient funds!");
+            } else {
+                alert("Invalid amount!");
+            }
+        }
+    </script>
+</body>
+</html>
